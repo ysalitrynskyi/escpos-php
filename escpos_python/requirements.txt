@@ -1,0 +1,17 @@
+# Core dependencies
+pillow>=9.0.0
+
+# Optional dependencies for different connection types
+pyusb>=1.2.0          # USB printer support
+pyserial>=3.5         # Serial printer support
+
+# Optional dependencies for barcode/QR code generation
+python-barcode>=0.14  # Barcode generation
+qrcode>=7.3           # QR code generation
+
+# Development dependencies
+pytest>=7.0.0
+pytest-cov>=4.0.0
+black>=22.0.0
+isort>=5.10.0
+mypy>=0.990

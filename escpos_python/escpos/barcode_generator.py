@@ -2,6 +2,13 @@
 Barcode Generator - Generate barcodes as images using python-barcode.
 
 This provides a fallback for printers that don't support native barcode printing.
+
+This file is part of escpos-python: Python library for ESC/POS-compatible
+thermal and impact printers.
+
+Copyright (c) 2024 Yevhen Salitrynskyi <https://github.com/ysalitrynskyi>
+
+This software is distributed under the terms of the MIT license.
 """
 
 from typing import Optional, Tuple

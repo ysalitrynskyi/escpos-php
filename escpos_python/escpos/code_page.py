@@ -4,8 +4,8 @@ CodePage class for character encoding support.
 This file is part of escpos-python: Python library for ESC/POS-compatible
 thermal and impact printers.
 
-Copyright (c) 2014-20 Michael Billington <michael.billington@gmail.com>,
-incorporating modifications by others.
+Copyright (c) 2014-20 Michael Billington <michael.billington@gmail.com>
+Copyright (c) 2024 Yevhen Salitrynskyi <https://github.com/ysalitrynskyi> - Python port
 
 This software is distributed under the terms of the MIT license.
 """

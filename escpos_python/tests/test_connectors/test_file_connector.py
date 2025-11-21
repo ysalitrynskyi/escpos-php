@@ -5,7 +5,7 @@ Tests for the FileConnector class.
 import pytest
 import tempfile
 import os
-from escpos_printer.connectors.file_connector import FileConnector
+from escpos_thermal.connectors.file_connector import FileConnector
 
 
 class TestFileConnector:

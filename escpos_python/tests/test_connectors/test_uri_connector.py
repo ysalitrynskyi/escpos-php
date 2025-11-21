@@ -5,9 +5,9 @@ Tests for the UriConnector class.
 import pytest
 import tempfile
 import os
-from escpos_printer.connectors.uri_connector import UriConnector
-from escpos_printer.connectors.file_connector import FileConnector
-from escpos_printer.connectors.network_connector import NetworkConnector
+from escpos_thermal.connectors.uri_connector import UriConnector
+from escpos_thermal.connectors.file_connector import FileConnector
+from escpos_thermal.connectors.network_connector import NetworkConnector
 
 
 class TestUriConnector:

@@ -3,8 +3,8 @@ Tests for the MultipleConnector class.
 """
 
 import pytest
-from escpos_printer.connectors.dummy_connector import DummyConnector
-from escpos_printer.connectors.multiple_connector import MultipleConnector
+from escpos_thermal.connectors.dummy_connector import DummyConnector
+from escpos_thermal.connectors.multiple_connector import MultipleConnector
 
 
 class TestMultipleConnector:

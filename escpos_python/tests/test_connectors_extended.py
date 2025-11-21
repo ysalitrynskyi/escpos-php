@@ -5,10 +5,10 @@ Extended tests for connectors.
 import pytest
 import tempfile
 import os
-from escpos_printer.connectors.dummy_connector import DummyConnector
-from escpos_printer.connectors.file_connector import FileConnector
-from escpos_printer.connectors.multiple_connector import MultipleConnector
-from escpos_printer.connectors.uri_connector import UriConnector
+from escpos_thermal.connectors.dummy_connector import DummyConnector
+from escpos_thermal.connectors.file_connector import FileConnector
+from escpos_thermal.connectors.multiple_connector import MultipleConnector
+from escpos_thermal.connectors.uri_connector import UriConnector
 
 
 # ============================================================================

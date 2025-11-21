@@ -15,8 +15,8 @@ try:
 except ImportError:
     PIL_AVAILABLE = False
 
-from escpos_printer import Printer, EscposImage
-from escpos_printer.connectors import DummyConnector
+from escpos_thermal import Printer, EscposImage
+from escpos_thermal.connectors import DummyConnector
 
 
 def create_logo(width: int = 200, height: int = 80) -> str:

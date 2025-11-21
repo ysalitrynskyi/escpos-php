@@ -6,8 +6,8 @@ This example shows how to connect to a USB printer on Linux.
 """
 
 import os
-from escpos_printer import Printer
-from escpos_printer.connectors import FileConnector
+from escpos_thermal import Printer
+from escpos_thermal.connectors import FileConnector
 
 
 def main():

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-Barcode printing example for escpos-printer.
+Barcode printing example for escpos-thermal.
 
 This example demonstrates printing various barcode types.
 """
 
-from escpos_printer import Printer
-from escpos_printer.connectors import DummyConnector
+from escpos_thermal import Printer
+from escpos_thermal.connectors import DummyConnector
 
 
 def main():

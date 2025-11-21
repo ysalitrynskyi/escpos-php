@@ -5,10 +5,10 @@ Serial port printer connection example.
 This example shows how to connect to a serial port printer.
 """
 
-from escpos_printer import Printer
+from escpos_thermal import Printer
 
 try:
-    from escpos_printer.connectors import SerialConnector
+    from escpos_thermal.connectors import SerialConnector
     SERIAL_AVAILABLE = True
 except ImportError:
     SERIAL_AVAILABLE = False

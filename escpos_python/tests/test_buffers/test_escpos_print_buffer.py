@@ -3,9 +3,9 @@ Tests for the EscposPrintBuffer class.
 """
 
 import pytest
-from escpos_printer.buffers.escpos_print_buffer import EscposPrintBuffer
-from escpos_printer.printer import Printer
-from escpos_printer.connectors.dummy_connector import DummyConnector
+from escpos_thermal.buffers.escpos_print_buffer import EscposPrintBuffer
+from escpos_thermal.printer import Printer
+from escpos_thermal.connectors.dummy_connector import DummyConnector
 
 
 class TestEscposPrintBuffer:

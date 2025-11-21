@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-QR code printing example for escpos-printer.
+QR code printing example for escpos-thermal.
 
 This example demonstrates printing QR codes.
 """
 
-from escpos_printer import Printer
-from escpos_printer.connectors import DummyConnector
+from escpos_thermal import Printer
+from escpos_thermal.connectors import DummyConnector
 
 
 def main():

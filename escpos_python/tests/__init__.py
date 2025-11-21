@@ -1,3 +1,3 @@
 """
-Test suite for escpos-printer.
+Test suite for escpos-thermal.
 """

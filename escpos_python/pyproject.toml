@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "escpos-printer"
+name = "escpos-thermal"
 version = "1.0.0"
 description = "Python library for ESC/POS thermal and impact printers"
 readme = "README.md"
@@ -56,16 +56,16 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/ysalitrynskyi/escpos-printer"
-Documentation = "https://github.com/ysalitrynskyi/escpos-printer"
-Repository = "https://github.com/ysalitrynskyi/escpos-printer"
+Homepage = "https://github.com/ysalitrynskyi/escpos-thermal"
+Documentation = "https://github.com/ysalitrynskyi/escpos-thermal"
+Repository = "https://github.com/ysalitrynskyi/escpos-thermal"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["escpos_printer*"]
+include = ["escpos_thermal*"]
 
 [tool.setuptools.package-data]
-escpos_printer = ["resources/*.json"]
+escpos_thermal = ["resources/*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

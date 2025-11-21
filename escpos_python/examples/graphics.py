@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Graphics printing example for escpos-printer.
+Graphics printing example for escpos-thermal.
 
 This example demonstrates printing images.
 """
@@ -15,8 +15,8 @@ try:
 except ImportError:
     PIL_AVAILABLE = False
 
-from escpos_printer import Printer, EscposImage
-from escpos_printer.connectors import DummyConnector
+from escpos_thermal import Printer, EscposImage
+from escpos_thermal.connectors import DummyConnector
 
 
 def create_test_image(width: int = 200, height: int = 50) -> str:

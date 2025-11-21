@@ -3,7 +3,7 @@ Tests for the CapabilityProfile class.
 """
 
 import pytest
-from escpos_printer.capability_profile import CapabilityProfile
+from escpos_thermal.capability_profile import CapabilityProfile
 
 
 class TestCapabilityProfileLoading:

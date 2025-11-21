@@ -5,10 +5,10 @@ USB printer connection example using pyusb.
 This example shows how to connect to a USB printer using pyusb.
 """
 
-from escpos_printer import Printer
+from escpos_thermal import Printer
 
 try:
-    from escpos_printer.connectors import USBConnector
+    from escpos_thermal.connectors import USBConnector
     USB_AVAILABLE = True
 except ImportError:
     USB_AVAILABLE = False

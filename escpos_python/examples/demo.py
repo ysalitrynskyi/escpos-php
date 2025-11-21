@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-Basic demo of escpos-printer functionality.
+Basic demo of escpos-thermal functionality.
 
 This example demonstrates basic text formatting and printing.
 """
 
-from escpos_printer import Printer
-from escpos_printer.connectors import DummyConnector, NetworkConnector, FileConnector
+from escpos_thermal import Printer
+from escpos_thermal.connectors import DummyConnector, NetworkConnector, FileConnector
 
 
 def main():

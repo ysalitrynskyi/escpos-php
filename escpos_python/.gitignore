@@ -67,3 +67,4 @@ venv.bak/
 
 # Cache files
 escpos/buffers/cache/*.z
+*.ser.z

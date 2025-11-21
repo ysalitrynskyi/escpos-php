@@ -3,16 +3,17 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "escpos-python"
+name = "escpos-printer"
 version = "1.0.0"
-description = "Python library for ESC/POS-compatible thermal and impact receipt printers"
+description = "Python library for ESC/POS thermal and impact printers"
 readme = "README.md"
 license = {text = "MIT"}
 authors = [
-    {name = "Michael Billington", email = "michael.billington@gmail.com"}
+    {name = "Michael Billington", email = "michael.billington@gmail.com"},
+    {name = "Yevhen Salitrynskyi"}
 ]
 maintainers = [
-    {name = "escpos-python contributors"}
+    {name = "Yevhen Salitrynskyi"}
 ]
 keywords = ["escpos", "printer", "thermal", "receipt", "pos", "point-of-sale"]
 classifiers = [
@@ -55,16 +56,16 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/mike42/escpos-php"
-Documentation = "https://github.com/mike42/escpos-php"
-Repository = "https://github.com/mike42/escpos-php"
+Homepage = "https://github.com/ysalitrynskyi/escpos-printer"
+Documentation = "https://github.com/ysalitrynskyi/escpos-printer"
+Repository = "https://github.com/ysalitrynskyi/escpos-printer"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["escpos*"]
+include = ["escpos_printer*"]
 
 [tool.setuptools.package-data]
-escpos = ["resources/*.json"]
+escpos_printer = ["resources/*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

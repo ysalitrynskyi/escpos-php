@@ -6,7 +6,7 @@ This provides a fallback for printers that don't support native barcode printing
 This file is part of escpos-python: Python library for ESC/POS-compatible
 thermal and impact printers.
 
-Copyright (c) 2024 Yevhen Salitrynskyi <https://github.com/ysalitrynskyi>
+Copyright (c) 2025 Yevhen Salitrynskyi <ysalitrynskyi@gmail.com>
 
 This software is distributed under the terms of the MIT license.
 """

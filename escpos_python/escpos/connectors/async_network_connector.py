@@ -4,7 +4,7 @@ AsyncNetworkConnector - An async connector for TCP/IP network printers.
 This file is part of escpos-python: Python library for ESC/POS-compatible
 thermal and impact printers.
 
-Copyright (c) 2024 Yevhen Salitrynskyi <https://github.com/ysalitrynskyi>
+Copyright (c) 2025 Yevhen Salitrynskyi <ysalitrynskyi@gmail.com>
 
 This software is distributed under the terms of the MIT license.
 """

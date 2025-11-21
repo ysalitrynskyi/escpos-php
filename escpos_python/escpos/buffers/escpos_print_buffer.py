@@ -277,8 +277,14 @@ class EscposPrintBuffer(PrintBuffer):
 
         Args:
             data: String data to write.
+
+        Raises:
+            ValueError: If the data contains characters outside the latin-1 range.
         """
-        self._printer.get_print_connector().write(data.encode('latin-1'))
+        try:
+            self._printer.get_print_connector().write(data.encode('latin-1'))
+        except UnicodeEncodeError as e:
+            raise ValueError(f"Cannot encode text for printer (character outside 0-255 range): {e}")
 
     @staticmethod
     def _ascii_check(char: str, extended: bool = False) -> bool:

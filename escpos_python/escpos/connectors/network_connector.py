@@ -75,11 +75,16 @@ class NetworkConnector(PrintConnector):
             Data read from the socket.
 
         Raises:
-            IOError: If the connector has been closed.
+            IOError: If the connector has been closed or on timeout/error.
         """
         if self._socket is None:
             raise IOError("PrintConnector has been closed, cannot read input.")
-        return self._socket.recv(length)
+        try:
+            return self._socket.recv(length)
+        except socket.timeout:
+            raise IOError("Socket timeout during read operation")
+        except socket.error as e:
+            raise IOError(f"Socket error during read: {e}")
 
     def write(self, data: bytes) -> None:
         """
@@ -89,8 +94,13 @@ class NetworkConnector(PrintConnector):
             data: Data to write.
 
         Raises:
-            IOError: If the connector has been closed.
+            IOError: If the connector has been closed or on timeout/error.
         """
         if self._socket is None:
             raise IOError("PrintConnector has been closed, cannot send output.")
-        self._socket.sendall(data)
+        try:
+            self._socket.sendall(data)
+        except socket.timeout:
+            raise IOError("Socket timeout during write operation")
+        except socket.error as e:
+            raise IOError(f"Socket error during write: {e}")

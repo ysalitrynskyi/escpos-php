@@ -11,6 +11,7 @@ This software is distributed under the terms of the MIT license.
 """
 
 import re
+import logging
 from math import ceil
 from typing import Optional, List, Union, TYPE_CHECKING
 
@@ -20,6 +21,9 @@ from escpos.connectors.print_connector import PrintConnector
 if TYPE_CHECKING:
     from escpos.buffers.print_buffer import PrintBuffer
     from escpos.escpos_image import EscposImage
+
+# Module-level logger
+logger = logging.getLogger(__name__)
 
 
 class Printer:
@@ -158,7 +162,113 @@ class Printer:
         Close the underlying buffer. With some connectors, the job will not
         actually be sent to the printer until this is called.
         """
+        logger.debug("Closing printer connection")
         self._connector.finalize()
+
+    # Context manager support
+
+    def __enter__(self) -> 'Printer':
+        """Context manager entry - returns the printer instance."""
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        """Context manager exit - closes the printer."""
+        self.close()
+
+    # Printer status methods
+
+    def get_printer_status(self, status_type: int = STATUS_PRINTER) -> Optional[bytes]:
+        """
+        Request and read printer status using DLE EOT command.
+
+        Args:
+            status_type: Type of status to request:
+                - STATUS_PRINTER (1): General printer status
+                - STATUS_OFFLINE_CAUSE (2): Offline cause status
+                - STATUS_ERROR_CAUSE (3): Error cause status
+                - STATUS_PAPER_ROLL (4): Paper roll sensor status
+
+        Returns:
+            Status byte(s) from printer, or None if read fails.
+
+        Note:
+            Not all printers support status reading. The connector must
+            support the read() method.
+        """
+        self._validate_integer(status_type, 1, 8, "get_printer_status")
+        logger.debug(f"Requesting printer status type {status_type}")
+
+        # Send DLE EOT n command
+        self._connector.write(self.DLE + self.EOT + bytes([status_type]))
+
+        try:
+            status = self._connector.read(1)
+            logger.debug(f"Received status: {status.hex() if status else 'None'}")
+            return status
+        except Exception as e:
+            logger.warning(f"Failed to read printer status: {e}")
+            return None
+
+    def is_online(self) -> Optional[bool]:
+        """
+        Check if the printer is online.
+
+        Returns:
+            True if online, False if offline, None if status cannot be read.
+        """
+        status = self.get_printer_status(self.STATUS_PRINTER)
+        if status is None or len(status) == 0:
+            return None
+        # Bit 3 (0x08) indicates offline status
+        return (status[0] & 0x08) == 0
+
+    def has_paper(self) -> Optional[bool]:
+        """
+        Check if the printer has paper.
+
+        Returns:
+            True if paper present, False if paper out, None if status cannot be read.
+        """
+        status = self.get_printer_status(self.STATUS_PAPER_ROLL)
+        if status is None or len(status) == 0:
+            return None
+        # Bits 5-6 (0x60) indicate paper status
+        # 0x00 = paper present, 0x60 = paper near end or out
+        return (status[0] & 0x60) == 0
+
+    def has_error(self) -> Optional[bool]:
+        """
+        Check if the printer has an error condition.
+
+        Returns:
+            True if error present, False if no error, None if status cannot be read.
+        """
+        status = self.get_printer_status(self.STATUS_ERROR_CAUSE)
+        if status is None or len(status) == 0:
+            return None
+        # Various bits indicate different errors
+        # Bit 3 (0x08) = cutter error, Bit 5 (0x20) = unrecoverable error
+        # Bit 6 (0x40) = auto-recoverable error
+        return (status[0] & 0x68) != 0
+
+    def is_drawer_open(self, pin: int = 0) -> Optional[bool]:
+        """
+        Check if the cash drawer is open.
+
+        Args:
+            pin: Drawer pin to check (0 or 1).
+
+        Returns:
+            True if drawer is open, False if closed, None if status cannot be read.
+
+        Note:
+            Requires a cash drawer with status feedback connected to the printer.
+        """
+        status = self.get_printer_status(self.STATUS_PRINTER)
+        if status is None or len(status) == 0:
+            return None
+        # Bit 2 (0x04) indicates drawer status
+        return (status[0] & 0x04) != 0
 
     # Text output methods
 

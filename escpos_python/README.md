@@ -1,68 +1,56 @@
 # escpos-python
 
-A Python 3 library for ESC/POS-compatible thermal and impact receipt printers.
-
-## About
-
-This is a complete Python 3 port of the [escpos-php](https://github.com/mike42/escpos-php) library by Michael Billington.
-
-**Ported by:** [Yevhen Salitrynskyi](https://github.com/ysalitrynskyi)
-
-The library provides a 1:1 feature-complete implementation of the original PHP library, allowing you to control ESC/POS thermal printers from Python applications.
+A powerful Python library for ESC/POS thermal receipt printers.
 
 ## Features
 
-- **Text printing** with various fonts, sizes, and styles (bold, underline, double-strike)
-- **Barcode printing** - UPC-A, UPC-E, EAN-13, EAN-8, CODE39, ITF, CODABAR, CODE93, CODE128
-- **QR code printing** with configurable error correction levels
-- **PDF417 2D barcode** support
-- **Image/graphics printing** via Pillow
-- **Cash drawer control** (pulse commands)
-- **Paper cutting** (full and partial cut)
-- **Character encoding** support (80+ code pages)
-- **Multiple connection types** - Network, USB, Serial, File, CUPS
-
-## Requirements
-
-- Python 3.8+
-- Pillow (for image processing)
-
-Optional dependencies:
-- `pyusb` - for USB printer support
-- `pyserial` - for serial port printer support
-- `qrcode` - for QR code generation
-- `python-barcode` - for barcode generation
+- **Full ESC/POS Support** - Text, formatting, barcodes, QR codes, images, and more
+- **Multiple Connections** - Network (TCP/IP), USB, Serial, File, CUPS, and Windows printing
+- **Async Support** - AsyncNetworkConnector for non-blocking I/O
+- **Image Dithering** - Floyd-Steinberg, Atkinson, and ordered dithering algorithms
+- **Printer Status** - Read paper status, online state, and error conditions
+- **Cash Drawer Control** - Open drawers and check open/closed status
+- **Context Manager** - Clean resource management with `with` statement
+- **Logging** - Built-in debug logging support
+- **294 Tests** - Comprehensive test coverage
 
 ## Installation
 
-### From source (development)
-
 ```bash
-git clone https://github.com/ysalitrynskyi/escpos-php.git
-cd escpos-php/escpos_python
-pip install -e .
+pip install escpos-python
 ```
 
-### Install with optional dependencies
+### Optional Dependencies
 
 ```bash
-# USB support
-pip install -e ".[usb]"
+# USB printer support
+pip install pyusb
 
-# Serial support
-pip install -e ".[serial]"
+# Serial printer support
+pip install pyserial
 
-# All optional dependencies
-pip install -e ".[all]"
-```
+# QR code generation fallback
+pip install qrcode
 
-### Install dependencies manually
-
-```bash
-pip install -r requirements.txt
+# Barcode generation fallback
+pip install python-barcode
 ```
 
 ## Quick Start
+
+```python
+from escpos import Printer
+from escpos.connectors import NetworkConnector
+
+# Using context manager (recommended)
+with Printer(NetworkConnector("192.168.1.100", 9100)) as printer:
+    printer.text("Hello, World!\n")
+    printer.barcode("123456789012", Printer.BARCODE_UPCA)
+    printer.qr_code("https://example.com")
+    printer.cut()
+```
+
+## Connection Types
 
 ### Network Printer (TCP/IP)
 
@@ -70,43 +58,36 @@ pip install -r requirements.txt
 from escpos import Printer
 from escpos.connectors import NetworkConnector
 
-# Connect to printer at IP address, port 9100 (default)
-connector = NetworkConnector("192.168.1.100", 9100)
-printer = Printer(connector)
-
-# Print a simple receipt
-printer.initialize()
-printer.set_justification(Printer.JUSTIFY_CENTER)
-printer.text("MY STORE\n")
-printer.text("123 Main Street\n\n")
-
-printer.set_justification(Printer.JUSTIFY_LEFT)
-printer.text("Item 1              $10.00\n")
-printer.text("Item 2              $15.00\n")
-printer.text("Item 3               $5.00\n")
-printer.text("--------------------------------\n")
-printer.set_emphasis(True)
-printer.text("TOTAL               $30.00\n")
-printer.set_emphasis(False)
-
-printer.feed(3)
-printer.cut()
-printer.close()
+with Printer(NetworkConnector("192.168.1.100", 9100)) as printer:
+    printer.text("Network printing!\n")
+    printer.cut()
 ```
 
-### USB Printer (via pyusb)
+### Async Network Printer
+
+```python
+import asyncio
+from escpos.connectors import AsyncNetworkConnector
+
+async def print_async():
+    async with AsyncNetworkConnector("192.168.1.100", 9100) as conn:
+        await conn.write(b"\x1b@")  # Initialize
+        await conn.write(b"Async printing!\n")
+        await conn.write(b"\x1dVA\x03")  # Cut
+
+asyncio.run(print_async())
+```
+
+### USB Printer
 
 ```python
 from escpos import Printer
 from escpos.connectors import USBConnector
 
-# Find your printer's vendor ID and product ID using `lsusb`
-connector = USBConnector(0x04b8, 0x0202)  # Example: Epson TM-T88
-printer = Printer(connector)
-
-printer.text("Hello from USB!\n")
-printer.cut()
-printer.close()
+# Find vendor/product ID with: lsusb
+with Printer(USBConnector(0x04b8, 0x0202)) as printer:
+    printer.text("USB printing!\n")
+    printer.cut()
 ```
 
 ### Serial Printer
@@ -115,172 +96,154 @@ printer.close()
 from escpos import Printer
 from escpos.connectors import SerialConnector
 
-connector = SerialConnector("/dev/ttyUSB0", 9600)
-printer = Printer(connector)
-
-printer.text("Hello from Serial!\n")
-printer.cut()
-printer.close()
-```
-
-### File/Device Printer (Linux)
-
-```python
-from escpos import Printer
-from escpos.connectors import FileConnector
-
-# Direct device access (requires permissions)
-connector = FileConnector("/dev/usb/lp0")
-printer = Printer(connector)
-
-printer.text("Hello from device!\n")
-printer.cut()
-printer.close()
-```
-
-### Testing with DummyConnector
-
-```python
-from escpos import Printer
-from escpos.connectors import DummyConnector
-
-connector = DummyConnector()
-printer = Printer(connector)
-
-printer.text("This is a test\n")
-printer.barcode("123456789012", Printer.BARCODE_UPCA)
-printer.cut()
-
-# Get the raw bytes that would be sent to printer
-output = connector.get_data()
-print(f"Output size: {len(output)} bytes")
-
-printer.close()
-```
-
-## Printing Barcodes
-
-```python
-from escpos import Printer
-from escpos.connectors import NetworkConnector
-
-connector = NetworkConnector("192.168.1.100")
-printer = Printer(connector)
-
-# UPC-A barcode
-printer.barcode("012345678905", Printer.BARCODE_UPCA)
-
-# EAN-13 barcode
-printer.barcode("5901234123457", Printer.BARCODE_JAN13)
-
-# CODE128 barcode
-printer.barcode("{B" + "HELLO123", Printer.BARCODE_CODE128)
-
-printer.cut()
-printer.close()
-```
-
-## Printing QR Codes
-
-```python
-from escpos import Printer
-from escpos.connectors import NetworkConnector
-
-connector = NetworkConnector("192.168.1.100")
-printer = Printer(connector)
-
-# Simple QR code
-printer.qr_code("https://github.com/ysalitrynskyi")
-
-# QR code with options
-printer.qr_code(
-    "https://example.com",
-    ec=Printer.QR_ECLEVEL_H,  # High error correction
-    size=8,                    # Module size
-    model=Printer.QR_MODEL_2   # QR Model 2
-)
-
-printer.cut()
-printer.close()
-```
-
-## Printing Images
-
-```python
-from escpos import Printer
-from escpos.connectors import NetworkConnector
-from escpos import EscposImage
-
-connector = NetworkConnector("192.168.1.100")
-printer = Printer(connector)
-
-# Load and print an image
-img = EscposImage.load("logo.png")
-printer.graphics(img)
-
-# Or with size option
-printer.graphics(img, Printer.IMG_DOUBLE_WIDTH)
-
-printer.cut()
-printer.close()
+with Printer(SerialConnector("/dev/ttyUSB0", 9600)) as printer:
+    printer.text("Serial printing!\n")
+    printer.cut()
 ```
 
 ## Text Formatting
 
 ```python
-from escpos import Printer
-from escpos.connectors import NetworkConnector
+with Printer(connector) as printer:
+    # Text sizes (1-8)
+    printer.set_text_size(2, 2)
+    printer.text("BIG TEXT\n")
+    printer.set_text_size(1, 1)
 
-connector = NetworkConnector("192.168.1.100")
-printer = Printer(connector)
+    # Styles
+    printer.set_emphasis(True)
+    printer.text("Bold\n")
+    printer.set_emphasis(False)
 
-# Text sizes (1-8 for width and height)
-printer.set_text_size(2, 2)  # Double width and height
-printer.text("BIG TEXT\n")
-printer.set_text_size(1, 1)  # Normal
+    printer.set_underline(Printer.UNDERLINE_SINGLE)
+    printer.text("Underlined\n")
+    printer.set_underline(Printer.UNDERLINE_NONE)
 
-# Bold text
-printer.set_emphasis(True)
-printer.text("Bold text\n")
-printer.set_emphasis(False)
+    # Alignment
+    printer.set_justification(Printer.JUSTIFY_CENTER)
+    printer.text("Centered\n")
+    printer.set_justification(Printer.JUSTIFY_LEFT)
 
-# Underline
-printer.set_underline(Printer.UNDERLINE_SINGLE)
-printer.text("Underlined\n")
-printer.set_underline(Printer.UNDERLINE_NONE)
-
-# Justification
-printer.set_justification(Printer.JUSTIFY_CENTER)
-printer.text("Centered\n")
-printer.set_justification(Printer.JUSTIFY_RIGHT)
-printer.text("Right aligned\n")
-printer.set_justification(Printer.JUSTIFY_LEFT)
-
-# Fonts
-printer.set_font(Printer.FONT_B)
-printer.text("Font B (smaller)\n")
-printer.set_font(Printer.FONT_A)
-
-printer.cut()
-printer.close()
+    # Fonts
+    printer.set_font(Printer.FONT_B)
+    printer.text("Smaller font\n")
+    printer.set_font(Printer.FONT_A)
 ```
 
-## Supported Connectors
+## Barcodes
 
-| Connector | Description | Requirements |
-|-----------|-------------|--------------|
-| `NetworkConnector` | TCP/IP network printers | None |
-| `USBConnector` | USB printers | `pyusb` |
-| `SerialConnector` | Serial port printers | `pyserial` |
-| `FileConnector` | File or device path | None |
-| `CupsConnector` | CUPS printing system (Linux/macOS) | `pycups` |
-| `WindowsConnector` | Windows printing API | Windows |
-| `DummyConnector` | Testing (captures output) | None |
-| `MultipleConnector` | Broadcast to multiple printers | None |
+```python
+with Printer(connector) as printer:
+    # Configure barcode appearance
+    printer.set_barcode_height(80)
+    printer.set_barcode_width(3)
+    printer.set_barcode_text_position(Printer.BARCODE_TEXT_BELOW)
 
-## Printer Capability Profiles
+    # Print various barcode types
+    printer.barcode("012345678905", Printer.BARCODE_UPCA)
+    printer.barcode("5901234123457", Printer.BARCODE_JAN13)
+    printer.barcode("{BHELLO123", Printer.BARCODE_CODE128)
+    printer.barcode("ABC123", Printer.BARCODE_CODE39)
+```
 
-The library includes capability profiles for many printer models:
+## QR Codes
+
+```python
+with Printer(connector) as printer:
+    # Simple QR code
+    printer.qr_code("https://example.com")
+
+    # With options
+    printer.qr_code(
+        "https://example.com",
+        ec=Printer.QR_ECLEVEL_H,  # High error correction
+        size=8,                    # Module size
+        model=Printer.QR_MODEL_2
+    )
+```
+
+## Image Printing with Dithering
+
+```python
+from escpos import Printer, PillowEscposImage, DitherMode
+from escpos.connectors import NetworkConnector
+
+with Printer(NetworkConnector("192.168.1.100")) as printer:
+    # Simple threshold (default)
+    img = PillowEscposImage("logo.png")
+    printer.graphics(img)
+
+    # Floyd-Steinberg dithering (best for photos)
+    img = PillowEscposImage("photo.jpg", dither=DitherMode.FLOYDSTEINBERG)
+    printer.graphics(img)
+
+    # Atkinson dithering (lighter, good for graphics)
+    img = PillowEscposImage("graphic.png", dither=DitherMode.ATKINSON)
+    printer.graphics(img)
+
+    # Custom threshold
+    img = PillowEscposImage("logo.png", threshold=100)
+    printer.graphics(img)
+```
+
+### Convert Image to Monochrome
+
+```python
+from PIL import Image
+from escpos import PillowEscposImage, DitherMode
+
+# Convert any image to printer-ready monochrome
+pil_image = Image.open("photo.jpg")
+mono = PillowEscposImage.to_monochrome(pil_image, dither=DitherMode.FLOYDSTEINBERG)
+mono.save("preview.png")  # Preview what will print
+```
+
+## Printer Status
+
+```python
+with Printer(connector) as printer:
+    # Check printer status
+    if printer.is_online():
+        print("Printer is online")
+
+    if printer.has_paper():
+        print("Paper is loaded")
+    else:
+        print("Paper is low or out!")
+
+    if printer.has_error():
+        print("Printer has an error")
+```
+
+## Cash Drawer
+
+```python
+with Printer(connector) as printer:
+    # Open cash drawer
+    printer.pulse()  # Pin 0, default timing
+    printer.pulse(pin=1, on_ms=200, off_ms=400)  # Pin 1, custom timing
+
+    # Check drawer status (requires compatible hardware)
+    if printer.is_drawer_open():
+        print("Drawer is open!")
+```
+
+## Logging
+
+```python
+import logging
+
+# Enable debug logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger('escpos')
+logger.setLevel(logging.DEBUG)
+
+# Now printer operations will log debug info
+with Printer(connector) as printer:
+    printer.text("Debug logging enabled\n")
+```
+
+## Printer Profiles
 
 ```python
 from escpos import Printer, CapabilityProfile
@@ -292,89 +255,54 @@ print(profiles)
 
 # Use a specific profile
 profile = CapabilityProfile.load("TM-T88IV")
-connector = NetworkConnector("192.168.1.100")
-printer = Printer(connector, profile)
+with Printer(NetworkConnector("192.168.1.100"), profile) as printer:
+    printer.text("Using TM-T88IV profile\n")
 ```
 
 ## API Reference
 
-### Printer Class Constants
+### Printer Constants
 
-**Barcode Types:**
-- `BARCODE_UPCA`, `BARCODE_UPCE`, `BARCODE_JAN13`, `BARCODE_JAN8`
-- `BARCODE_CODE39`, `BARCODE_ITF`, `BARCODE_CODABAR`
-- `BARCODE_CODE93`, `BARCODE_CODE128`
+| Category | Constants |
+|----------|-----------|
+| Barcode Types | `BARCODE_UPCA`, `BARCODE_UPCE`, `BARCODE_JAN13`, `BARCODE_JAN8`, `BARCODE_CODE39`, `BARCODE_ITF`, `BARCODE_CODABAR`, `BARCODE_CODE93`, `BARCODE_CODE128` |
+| QR Code | `QR_ECLEVEL_L/M/Q/H`, `QR_MODEL_1/2`, `QR_MICRO` |
+| Text | `JUSTIFY_LEFT/CENTER/RIGHT`, `FONT_A/B/C`, `UNDERLINE_NONE/SINGLE/DOUBLE` |
+| Cut | `CUT_FULL`, `CUT_PARTIAL` |
+| Images | `IMG_DEFAULT`, `IMG_DOUBLE_WIDTH`, `IMG_DOUBLE_HEIGHT` |
 
-**QR Code:**
-- `QR_ECLEVEL_L`, `QR_ECLEVEL_M`, `QR_ECLEVEL_Q`, `QR_ECLEVEL_H`
-- `QR_MODEL_1`, `QR_MODEL_2`, `QR_MICRO`
+### DitherMode Options
 
-**Text:**
-- `JUSTIFY_LEFT`, `JUSTIFY_CENTER`, `JUSTIFY_RIGHT`
-- `FONT_A`, `FONT_B`, `FONT_C`
-- `UNDERLINE_NONE`, `UNDERLINE_SINGLE`, `UNDERLINE_DOUBLE`
+| Mode | Description |
+|------|-------------|
+| `DitherMode.NONE` | Simple threshold (fast, good for logos) |
+| `DitherMode.FLOYDSTEINBERG` | Floyd-Steinberg error diffusion (best for photos) |
+| `DitherMode.ATKINSON` | Atkinson dithering (lighter, good for graphics) |
+| `DitherMode.ORDERED` | Bayer ordered dithering (fast, consistent) |
 
-**Cut:**
-- `CUT_FULL`, `CUT_PARTIAL`
+### Connectors
 
-**Images:**
-- `IMG_DEFAULT`, `IMG_DOUBLE_WIDTH`, `IMG_DOUBLE_HEIGHT`, `IMG_DOUBLE_WIDTH | IMG_DOUBLE_HEIGHT`
+| Connector | Use Case | Requirements |
+|-----------|----------|--------------|
+| `NetworkConnector` | TCP/IP printers | None |
+| `AsyncNetworkConnector` | Async TCP/IP | None |
+| `USBConnector` | USB printers | `pyusb` |
+| `SerialConnector` | Serial printers | `pyserial` |
+| `FileConnector` | Device files | None |
+| `CupsConnector` | CUPS (Linux/macOS) | `pycups` |
+| `WindowsConnector` | Windows API | Windows |
+| `DummyConnector` | Testing | None |
 
-### Main Methods
+## Requirements
 
-| Method | Description |
-|--------|-------------|
-| `initialize()` | Reset printer to default state |
-| `text(str)` | Print text |
-| `feed(lines)` | Feed paper |
-| `cut(mode, lines)` | Cut paper |
-| `barcode(content, type)` | Print barcode |
-| `qr_code(content, ec, size, model)` | Print QR code |
-| `graphics(image, size)` | Print image |
-| `pulse(pin, on_ms, off_ms)` | Open cash drawer |
-| `set_font(font)` | Set font |
-| `set_justification(justification)` | Set text alignment |
-| `set_text_size(width, height)` | Set text size |
-| `set_emphasis(on)` | Set bold |
-| `set_underline(mode)` | Set underline |
-| `close()` | Close connection |
-
-## Troubleshooting
-
-### Permission Denied (Linux USB)
-
-Add udev rules for your printer:
-
-```bash
-# /etc/udev/rules.d/99-escpos.rules
-SUBSYSTEM=="usb", ATTR{idVendor}=="04b8", ATTR{idProduct}=="0202", MODE="0666"
-```
-
-Then reload rules:
-```bash
-sudo udevadm control --reload-rules
-sudo udevadm trigger
-```
-
-### Finding USB Vendor/Product ID
-
-```bash
-lsusb
-# Look for your printer, e.g.:
-# Bus 001 Device 005: ID 04b8:0202 Seiko Epson Corp. Receipt Printer
-```
-
-### Network Printer Not Responding
-
-- Verify printer IP: `ping 192.168.1.100`
-- Check port is open: `nc -zv 192.168.1.100 9100`
-- Ensure firewall allows port 9100
-
-## Credits
-
-- **Original PHP Library:** [mike42/escpos-php](https://github.com/mike42/escpos-php) by Michael Billington
-- **Python Port:** [Yevhen Salitrynskyi](https://github.com/ysalitrynskyi)
+- Python 3.8+
+- Pillow (for image support)
 
 ## License
 
-MIT License - see the original [escpos-php](https://github.com/mike42/escpos-php) for details.
+MIT License
+
+## Credits
+
+- **Author:** [Yevhen Salitrynskyi](https://github.com/ysalitrynskyi)
+- **Based on:** [escpos-php](https://github.com/mike42/escpos-php) by Michael Billington

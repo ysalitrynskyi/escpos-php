@@ -10,12 +10,14 @@ from escpos.connectors.file_connector import FileConnector
 from escpos.connectors.network_connector import NetworkConnector
 from escpos.connectors.multiple_connector import MultipleConnector
 from escpos.connectors.uri_connector import UriConnector
+from escpos.connectors.async_network_connector import AsyncNetworkConnector
 
 __all__ = [
     "PrintConnector",
     "DummyConnector",
     "FileConnector",
     "NetworkConnector",
+    "AsyncNetworkConnector",
     "MultipleConnector",
     "UriConnector",
 ]

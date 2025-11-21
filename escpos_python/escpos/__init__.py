@@ -1,5 +1,5 @@
 """
-escpos-python: Python library for ESC/POS-compatible thermal and impact receipt printers.
+escpos-printer: Python library for ESC/POS-compatible thermal and impact receipt printers.
 
 A full-featured library for controlling ESC/POS thermal printers from Python.
 Supports text, barcodes, QR codes, images, cash drawers, and more.

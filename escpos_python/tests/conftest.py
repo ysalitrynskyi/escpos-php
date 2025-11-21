@@ -1,5 +1,5 @@
 """
-Pytest configuration and fixtures for escpos-python tests.
+Pytest configuration and fixtures for escpos-printer tests.
 """
 
 import pytest

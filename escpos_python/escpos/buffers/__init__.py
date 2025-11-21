@@ -1,5 +1,5 @@
 """
-Print buffers for escpos-python.
+Print buffers for escpos-printer.
 
 Buffers manage text output and character encoding for the printer.
 """

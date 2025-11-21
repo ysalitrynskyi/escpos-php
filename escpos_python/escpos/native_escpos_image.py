@@ -1,7 +1,7 @@
 """
 NativeEscposImage - Image handling using pure Python.
 
-This file is part of escpos-python: Python library for ESC/POS-compatible
+This file is part of escpos-printer: Python library for ESC/POS-compatible
 thermal and impact printers.
 
 Copyright (c) 2014-20 Michael Billington <michael.billington@gmail.com>

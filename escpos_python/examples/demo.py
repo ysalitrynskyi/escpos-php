@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Basic demo of escpos-python functionality.
+Basic demo of escpos-printer functionality.
 
 This example demonstrates basic text formatting and printing.
 """

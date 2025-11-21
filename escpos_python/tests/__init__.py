@@ -1,3 +1,3 @@
 """
-Test suite for escpos-python.
+Test suite for escpos-printer.
 """

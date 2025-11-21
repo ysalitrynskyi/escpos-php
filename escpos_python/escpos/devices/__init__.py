@@ -1,5 +1,5 @@
 """
-Device-specific implementations for escpos-python.
+Device-specific implementations for escpos-printer.
 """
 
 from escpos.devices.aures_customer_display import AuresCustomerDisplay

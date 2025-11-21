@@ -1,5 +1,5 @@
 """
-Print connectors for escpos-python.
+Print connectors for escpos-printer.
 
 Connectors are responsible for transporting print data to the actual printer.
 """

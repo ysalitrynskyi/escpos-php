@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Barcode printing example for escpos-python.
+Barcode printing example for escpos-printer.
 
 This example demonstrates printing various barcode types.
 """

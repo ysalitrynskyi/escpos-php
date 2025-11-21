@@ -1,4 +1,4 @@
-# escpos-python
+# escpos-printer
 
 A powerful Python library for ESC/POS thermal receipt printers.
 
@@ -17,7 +17,7 @@ A powerful Python library for ESC/POS thermal receipt printers.
 ## Installation
 
 ```bash
-pip install escpos-python
+pip install escpos-printer
 ```
 
 ### Optional Dependencies

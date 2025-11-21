@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Graphics printing example for escpos-python.
+Graphics printing example for escpos-printer.
 
 This example demonstrates printing images.
 """

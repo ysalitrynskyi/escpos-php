@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-QR code printing example for escpos-python.
+QR code printing example for escpos-printer.
 
 This example demonstrates printing QR codes.
 """

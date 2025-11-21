@@ -1,5 +1,5 @@
 """
-Experimental Unifont support for escpos-python.
+Experimental Unifont support for escpos-printer.
 
 Warning: These features are experimental and may change in future versions.
 """

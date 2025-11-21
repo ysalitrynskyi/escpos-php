@@ -39,8 +39,8 @@ pip install python-barcode
 ## Quick Start
 
 ```python
-from escpos import Printer
-from escpos.connectors import NetworkConnector
+from escpos_printer import Printer
+from escpos_printer.connectors import NetworkConnector
 
 # Using context manager (recommended)
 with Printer(NetworkConnector("192.168.1.100", 9100)) as printer:
@@ -55,8 +55,8 @@ with Printer(NetworkConnector("192.168.1.100", 9100)) as printer:
 ### Network Printer (TCP/IP)
 
 ```python
-from escpos import Printer
-from escpos.connectors import NetworkConnector
+from escpos_printer import Printer
+from escpos_printer.connectors import NetworkConnector
 
 with Printer(NetworkConnector("192.168.1.100", 9100)) as printer:
     printer.text("Network printing!\n")
@@ -67,7 +67,7 @@ with Printer(NetworkConnector("192.168.1.100", 9100)) as printer:
 
 ```python
 import asyncio
-from escpos.connectors import AsyncNetworkConnector
+from escpos_printer.connectors import AsyncNetworkConnector
 
 async def print_async():
     async with AsyncNetworkConnector("192.168.1.100", 9100) as conn:
@@ -81,8 +81,8 @@ asyncio.run(print_async())
 ### USB Printer
 
 ```python
-from escpos import Printer
-from escpos.connectors import USBConnector
+from escpos_printer import Printer
+from escpos_printer.connectors import USBConnector
 
 # Find vendor/product ID with: lsusb
 with Printer(USBConnector(0x04b8, 0x0202)) as printer:
@@ -93,8 +93,8 @@ with Printer(USBConnector(0x04b8, 0x0202)) as printer:
 ### Serial Printer
 
 ```python
-from escpos import Printer
-from escpos.connectors import SerialConnector
+from escpos_printer import Printer
+from escpos_printer.connectors import SerialConnector
 
 with Printer(SerialConnector("/dev/ttyUSB0", 9600)) as printer:
     printer.text("Serial printing!\n")
@@ -165,8 +165,8 @@ with Printer(connector) as printer:
 ## Image Printing with Dithering
 
 ```python
-from escpos import Printer, PillowEscposImage, DitherMode
-from escpos.connectors import NetworkConnector
+from escpos_printer import Printer, PillowEscposImage, DitherMode
+from escpos_printer.connectors import NetworkConnector
 
 with Printer(NetworkConnector("192.168.1.100")) as printer:
     # Simple threshold (default)
@@ -190,7 +190,7 @@ with Printer(NetworkConnector("192.168.1.100")) as printer:
 
 ```python
 from PIL import Image
-from escpos import PillowEscposImage, DitherMode
+from escpos_printer import PillowEscposImage, DitherMode
 
 # Convert any image to printer-ready monochrome
 pil_image = Image.open("photo.jpg")
@@ -246,8 +246,8 @@ with Printer(connector) as printer:
 ## Printer Profiles
 
 ```python
-from escpos import Printer, CapabilityProfile
-from escpos.connectors import NetworkConnector
+from escpos_printer import Printer, CapabilityProfile
+from escpos_printer.connectors import NetworkConnector
 
 # List available profiles
 profiles = CapabilityProfile.get_profile_names()

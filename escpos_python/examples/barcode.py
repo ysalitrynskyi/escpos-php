@@ -5,8 +5,8 @@ Barcode printing example for escpos-printer.
 This example demonstrates printing various barcode types.
 """
 
-from escpos import Printer
-from escpos.connectors import DummyConnector
+from escpos_printer import Printer
+from escpos_printer.connectors import DummyConnector
 
 
 def main():

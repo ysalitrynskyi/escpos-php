@@ -5,8 +5,8 @@ Ethernet/network printer connection example.
 This example shows how to connect to a network printer.
 """
 
-from escpos import Printer
-from escpos.connectors import NetworkConnector
+from escpos_printer import Printer
+from escpos_printer.connectors import NetworkConnector
 
 
 def main():

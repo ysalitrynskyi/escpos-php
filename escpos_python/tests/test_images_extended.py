@@ -7,8 +7,8 @@ import tempfile
 import os
 from io import BytesIO
 from PIL import Image
-from escpos.escpos_image import EscposImage
-from escpos.pillow_escpos_image import PillowEscposImage
+from escpos_printer.escpos_image import EscposImage
+from escpos_printer.pillow_escpos_image import PillowEscposImage
 
 
 # ============================================================================

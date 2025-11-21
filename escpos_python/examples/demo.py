@@ -5,8 +5,8 @@ Basic demo of escpos-printer functionality.
 This example demonstrates basic text formatting and printing.
 """
 
-from escpos import Printer
-from escpos.connectors import DummyConnector, NetworkConnector, FileConnector
+from escpos_printer import Printer
+from escpos_printer.connectors import DummyConnector, NetworkConnector, FileConnector
 
 
 def main():

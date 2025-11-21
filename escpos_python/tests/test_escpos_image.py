@@ -13,7 +13,7 @@ try:
 except ImportError:
     PIL_AVAILABLE = False
 
-from escpos.escpos_image import EscposImage
+from escpos_printer.escpos_image import EscposImage
 
 
 class TestEscposImageStatic:
@@ -107,7 +107,7 @@ class TestPillowEscposImage:
 
     def test_from_pil_image(self):
         """Test creating from PIL Image directly."""
-        from escpos.pillow_escpos_image import PillowEscposImage
+        from escpos_printer.pillow_escpos_image import PillowEscposImage
 
         img = Image.new('RGB', (16, 16), color='white')
         escpos_img = PillowEscposImage.from_pil_image(img)
@@ -117,7 +117,7 @@ class TestPillowEscposImage:
 
     def test_rgba_image(self):
         """Test handling RGBA images."""
-        from escpos.pillow_escpos_image import PillowEscposImage
+        from escpos_printer.pillow_escpos_image import PillowEscposImage
 
         img = Image.new('RGBA', (8, 8), color=(255, 255, 255, 128))
         escpos_img = PillowEscposImage.from_pil_image(img)

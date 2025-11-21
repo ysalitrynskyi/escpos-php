@@ -15,8 +15,8 @@ try:
 except ImportError:
     PIL_AVAILABLE = False
 
-from escpos import Printer, EscposImage
-from escpos.connectors import DummyConnector
+from escpos_printer import Printer, EscposImage
+from escpos_printer.connectors import DummyConnector
 
 
 def create_test_image(width: int = 200, height: int = 50) -> str:

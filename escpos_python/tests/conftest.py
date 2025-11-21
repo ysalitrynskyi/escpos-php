@@ -9,9 +9,9 @@ from pathlib import Path
 # Add the escpos package to the path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from escpos.printer import Printer
-from escpos.connectors.dummy_connector import DummyConnector
-from escpos.capability_profile import CapabilityProfile
+from escpos_printer.printer import Printer
+from escpos_printer.connectors.dummy_connector import DummyConnector
+from escpos_printer.capability_profile import CapabilityProfile
 
 
 def friendly_binary(data: bytes) -> str:

@@ -3,7 +3,7 @@ Tests for the DummyConnector class.
 """
 
 import pytest
-from escpos.connectors.dummy_connector import DummyConnector
+from escpos_printer.connectors.dummy_connector import DummyConnector
 
 
 class TestDummyConnector:

@@ -3,8 +3,8 @@ Extended tests for capability profiles and code pages.
 """
 
 import pytest
-from escpos.capability_profile import CapabilityProfile
-from escpos.code_page import CodePage
+from escpos_printer.capability_profile import CapabilityProfile
+from escpos_printer.code_page import CodePage
 
 
 # ============================================================================

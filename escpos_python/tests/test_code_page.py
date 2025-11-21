@@ -3,7 +3,7 @@ Tests for the CodePage class.
 """
 
 import pytest
-from escpos.code_page import CodePage
+from escpos_printer.code_page import CodePage
 
 
 class TestCodePageBasics:

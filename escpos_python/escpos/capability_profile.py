@@ -61,7 +61,11 @@ class CapabilityProfile:
         # Load each code page
         for k, v in code_pages_data.items():
             if CapabilityProfile._encodings and v in CapabilityProfile._encodings:
-                self._code_pages[int(k)] = CodePage(v, CapabilityProfile._encodings[v])
+                try:
+                    code_page_idx = int(k)
+                except (ValueError, TypeError):
+                    continue  # Skip invalid code page indices
+                self._code_pages[code_page_idx] = CodePage(v, CapabilityProfile._encodings[v])
 
     def get_id(self) -> str:
         """

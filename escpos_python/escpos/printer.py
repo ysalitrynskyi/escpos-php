@@ -242,7 +242,12 @@ class Printer:
         Args:
             mode: Cut mode (CUT_FULL or CUT_PARTIAL).
             lines: Number of lines to feed before cutting.
+
+        Raises:
+            ValueError: If mode or lines are out of valid range.
         """
+        self._validate_integer(mode, self.CUT_FULL, self.CUT_PARTIAL, "cut", "mode")
+        self._validate_integer(lines, 0, 255, "cut", "lines")
         self._connector.write(self.GS + b"V" + bytes([mode, lines]))
 
     def pulse(self, pin: int = 0, on_ms: int = 120, off_ms: int = 240) -> None:

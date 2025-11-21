@@ -11,6 +11,7 @@ This software is distributed under the terms of the MIT license.
 """
 
 import re
+from math import ceil
 from typing import Optional, List, Union, TYPE_CHECKING
 
 from escpos.capability_profile import CapabilityProfile
@@ -621,7 +622,7 @@ class Printer:
         self._wrapper_send_2d_code_data(b'\x43', cn, bytes([width]))
         self._wrapper_send_2d_code_data(b'\x44', cn, bytes([height_multiplier]))
         # Set error correction ratio
-        ec_int = int(round(float(ec) * 10))
+        ec_int = int(ceil(float(ec) * 10))
         self._wrapper_send_2d_code_data(b'\x45', cn, bytes([ec_int]), b'1')
         # Send content & print
         self._wrapper_send_2d_code_data(b'\x50', cn, content.encode('utf-8'), b'0')
@@ -815,7 +816,7 @@ class Printer:
         Returns:
             Bytes representation.
         """
-        max_input = (256 << (length * 8) - 1)
+        max_input = (1 << (length * 8)) - 1
         Printer._validate_integer(length, 1, 4, "_int_low_high")
         Printer._validate_integer(value, 0, max_input, "_int_low_high")
 
